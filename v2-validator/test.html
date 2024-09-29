@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reCAPTCHA v2 Example</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <h1>reCAPTCHA v2 Checkbox</h1>
+    <form id="recaptcha-form" action="javascript:void(0);">
+        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('recaptcha-form').addEventListener('submit', function() {
+            var response = grecaptcha.getResponse();
+            document.getElementById('response').innerText = response ? "Challenge Response: " + response : "Please complete the reCAPTCHA.";
+        });
+    </script>
+</body>
+</html>
