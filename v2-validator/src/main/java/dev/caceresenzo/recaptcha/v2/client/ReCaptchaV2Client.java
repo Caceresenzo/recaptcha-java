@@ -20,7 +20,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.ToString;
 
-public class ReCaptchaV2Client implements ReCaptchaV2Validator, AutoCloseable {
+public class ReCaptchaV2Client implements ReCaptchaV2Validator {
 
 	public static final String FORM_MEDIA_TYPE = "application/x-www-form-urlencoded";
 	public static final URI VERIFY_URL = URI.create("https://www.google.com/recaptcha/api/siteverify");
@@ -76,11 +76,6 @@ public class ReCaptchaV2Client implements ReCaptchaV2Validator, AutoCloseable {
 			response.hasClientError(),
 			response.toErrorPhrase()
 		);
-	}
-
-	@Override
-	public void close() {
-		httpClient.close();
 	}
 
 	String buildRequestBody(String challengeResponse, String remoteIp) {

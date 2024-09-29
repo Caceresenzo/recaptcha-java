@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
-import org.junit.jupiter.api.AutoClose;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +15,6 @@ import dev.caceresenzo.recaptcha.v2.ReCaptchaV2Response;
 
 class ReCaptchaV2ClientTest {
 
-	@AutoClose
 	static ReCaptchaV2Client client;
 
 	@BeforeAll
