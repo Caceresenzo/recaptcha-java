@@ -23,6 +23,7 @@
 
 	<modules>
 		<module>v2-validator</module>
+		<module>v2-spring-boot-starter</module>
 	</modules>
 
 	<dependencyManagement>

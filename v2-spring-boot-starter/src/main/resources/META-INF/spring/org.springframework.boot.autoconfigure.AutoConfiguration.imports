@@ -1,0 +1,2 @@
+dev.caceresenzo.recaptcha.spring.boot.autoconfigure.ReCaptchaV2AutoConfiguration
+dev.caceresenzo.recaptcha.spring.boot.autoconfigure.ReCaptchaAnnotationWebAutoConfiguration
