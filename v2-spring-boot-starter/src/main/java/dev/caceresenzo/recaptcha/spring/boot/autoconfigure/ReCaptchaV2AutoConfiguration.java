@@ -36,8 +36,8 @@ public class ReCaptchaV2AutoConfiguration {
 
 		return new ReCaptchaV2ValidatorDefaults(
 			web.getLocation(),
-			web.getHeader(),
-			web.getQueryParameter()
+			web.getHeaderName(),
+			web.getQueryParameterName()
 		);
 	}
 

@@ -21,8 +21,8 @@ public class ReCaptchaV2Properties {
 	public class WebProperties {
 
 		private ChallengeResponseLocation location = ChallengeResponseLocation.QUERY;
-		private String header = ReCaptchaV2.DEFAULT_HEADER;
-		private String queryParameter = ReCaptchaV2.DEFAULT_QUERY_PARAMETER;
+		private String headerName = ReCaptchaV2.DEFAULT_HEADER_NAME;
+		private String queryParameterName = ReCaptchaV2.DEFAULT_QUERY_PARAMETER_NAME;
 
 	}
 

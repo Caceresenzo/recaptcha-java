@@ -7,20 +7,16 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.fasterxml.jackson.annotation.OptBoolean;
-
 @Documented
 @Retention(RUNTIME)
 @Target(METHOD)
 public @interface ReCaptchaV2 {
 
-	public static String DEFAULT_HEADER = "X-ReCaptcha-Response";
-	public static String DEFAULT_QUERY_PARAMETER = "reCaptchaResponse";
+	public static String DEFAULT_HEADER_NAME = "X-ReCaptcha-Response";
+	public static String DEFAULT_QUERY_PARAMETER_NAME = "reCaptchaResponse";
 
 	ChallengeResponseLocation location() default ChallengeResponseLocation.DEFAULT;
 
 	String name() default "";
-
-	OptBoolean validateIp() default OptBoolean.DEFAULT;
 
 }
