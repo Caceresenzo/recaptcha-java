@@ -70,7 +70,7 @@ There is a Spring Boot auto-configuration available.
 <dependencies>
     <dependency>
         <groupId>dev.caceresenzo.recaptcha</groupId>
-        <artifactId>recaptcha-spring-boot-starter</artifactId>
+        <artifactId>recaptcha-v2-spring-boot-starter</artifactId>
         <version>${recaptcha.version}</version>
     </dependency>
 </dependencies>
