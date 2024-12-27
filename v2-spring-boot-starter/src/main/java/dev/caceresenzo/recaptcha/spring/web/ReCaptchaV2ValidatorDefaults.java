@@ -5,6 +5,7 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 
 import dev.caceresenzo.recaptcha.spring.web.annotation.ChallengeResponseLocation;
+import dev.caceresenzo.recaptcha.spring.web.annotation.ReCaptchaV2;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -14,6 +15,10 @@ public record ReCaptchaV2ValidatorDefaults(
 	@NonNull String headerName,
 	@NonNull String queryParameterName
 ) {
+
+	public ReCaptchaV2ValidatorDefaults(ChallengeResponseLocation location) {
+		this(location, ReCaptchaV2.DEFAULT_HEADER_NAME, ReCaptchaV2.DEFAULT_QUERY_PARAMETER_NAME);
+	}
 
 	private static final MethodParameter HEADER_METHOD = getRecaptchaHeaderMethod();
 
