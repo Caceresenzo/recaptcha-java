@@ -1,5 +1,7 @@
 package dev.caceresenzo.recaptcha.spring.web;
 
+import java.util.Arrays;
+
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -12,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ReCaptchaV2AnnotationInterceptor implements HandlerInterceptor {
+
+	public static final String RESPONSE_ATTRIBUTE = "dev.caceresenzo.recaptcha/response";
 
 	private final ReCaptchaV2Validator validator;
 	private final ReCaptchaV2ValidatorDefaults defaults;
@@ -37,7 +41,12 @@ public class ReCaptchaV2AnnotationInterceptor implements HandlerInterceptor {
 		);
 
 		final var reCaptchaResponse = validator.verify(challengeResponse);
-		responseHandler.handle(reCaptchaResponse);
+		request.setAttribute(RESPONSE_ATTRIBUTE, reCaptchaResponse);
+
+		final var hasNoResponseParameter = Arrays.stream(handlerMethod.getMethodParameters()).noneMatch(ReCaptchaV2ArgumentResolver::isResponseType);
+		if (hasNoResponseParameter) {
+			responseHandler.handle(reCaptchaResponse);
+		}
 
 		return true;
 	}
