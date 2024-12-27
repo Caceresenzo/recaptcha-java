@@ -23,7 +23,7 @@ public class ReCaptchaV2AnnotationInterceptor implements HandlerInterceptor {
 
 		final var method = handlerMethod.getMethod();
 
-		ReCaptchaV2 annotation = method.getAnnotation(ReCaptchaV2.class);
+		final var annotation = method.getAnnotation(ReCaptchaV2.class);
 		if (annotation == null) {
 			return true;
 		}
@@ -34,7 +34,7 @@ public class ReCaptchaV2AnnotationInterceptor implements HandlerInterceptor {
 			request
 		);
 
-		validator.verify(challengeResponse).orThrows();
+		validator.verify(challengeResponse).orThrow();
 		return true;
 	}
 

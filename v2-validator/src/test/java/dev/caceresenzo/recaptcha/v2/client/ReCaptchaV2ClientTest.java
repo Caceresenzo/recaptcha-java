@@ -48,8 +48,8 @@ class ReCaptchaV2ClientTest {
 			)
 		);
 
-		assertDoesNotThrow(successResponse::orThrows);
-		assertThrows(ReCaptchaException.class, errorResponse::orThrows);
+		assertDoesNotThrow(() -> successResponse.orThrow());
+		assertThrows(ReCaptchaException.class, errorResponse::orThrow);
 	}
 
 	@Test
