@@ -20,7 +20,7 @@ import dev.caceresenzo.recaptcha.v2.ReCaptchaV2Response;
 import dev.caceresenzo.recaptcha.v2.ReCaptchaV2Validator;
 
 @Configuration(proxyBeanMethods = false)
-public class ReCaptchaAnnotationWebAutoConfiguration implements WebMvcConfigurer {
+public class ReCaptchaWebAutoConfiguration implements WebMvcConfigurer {
 
 	@Lazy
 	@Autowired(required = false)

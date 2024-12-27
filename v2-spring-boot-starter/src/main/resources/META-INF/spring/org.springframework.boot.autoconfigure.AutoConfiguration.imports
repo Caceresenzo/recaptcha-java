@@ -1,2 +1,3 @@
+dev.caceresenzo.recaptcha.spring.boot.autoconfigure.ReCaptchaSwaggerAutoConfiguration
 dev.caceresenzo.recaptcha.spring.boot.autoconfigure.ReCaptchaV2AutoConfiguration
-dev.caceresenzo.recaptcha.spring.boot.autoconfigure.ReCaptchaAnnotationWebAutoConfiguration
+dev.caceresenzo.recaptcha.spring.boot.autoconfigure.ReCaptchaWebAutoConfiguration

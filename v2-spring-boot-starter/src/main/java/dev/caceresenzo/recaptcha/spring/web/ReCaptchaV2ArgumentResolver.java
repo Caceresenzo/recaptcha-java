@@ -35,7 +35,6 @@ public class ReCaptchaV2ArgumentResolver implements HandlerMethodArgumentResolve
 	}
 
 	public static boolean isResponseType(MethodParameter parameter) {
-		System.out.println(parameter + "   " + parameter.getParameterType().isAssignableFrom(ReCaptchaV2Response.class));
 		return parameter.getParameterType().isAssignableFrom(ReCaptchaV2Response.class);
 	}
 

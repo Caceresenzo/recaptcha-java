@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(ReCaptchaV2Properties.class)
-@AutoConfigureBefore(ReCaptchaAnnotationWebAutoConfiguration.class)
+@AutoConfigureBefore(ReCaptchaWebAutoConfiguration.class)
 public class ReCaptchaV2AutoConfiguration {
 
 	@Bean
