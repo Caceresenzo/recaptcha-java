@@ -20,7 +20,7 @@
 
 ```xml
 <properties>
-    <recaptcha.version>0.1.0</recaptcha.version>
+    <recaptcha.version>0.2.0</recaptcha.version>
 </properties>
 
 <dependencies>
