@@ -9,7 +9,12 @@
 - [Usage](#usage)
   - [Verify a Challenge Response](#verify-a-challenge-response)
 - [Spring Boot Starter](#spring-boot-starter)
-  - [Controller Example](#controller-example)
+  - [Custom Handling](#custom-handling)
+  - [Controller Examples](#controller-examples)
+    - [General Case](#general-case)
+    - [Manually handling the result](#manually-handling-the-result)
+    - [Endpoint-specific configuration](#endpoint-specific-configuration)
+  - [Spring Doc Integration](#spring-doc-integration)
 
 # Installation
 
@@ -48,7 +53,7 @@ ReCaptchaV2Validator validator = ReCaptchaV2Validator.builder()
 ReCaptchaV2Response response = validator.verify("abcdefijklmnopqrstuvwxyz");
 
 /* throws an exception if there is an error */
-response.orThrows();
+response.orThrow();
 
 /* use pattern matching to decide */
 switch (response) {
@@ -95,7 +100,28 @@ recaptcha:
       query-parameter-name: reCaptchaResponse
 ```
 
-## Controller Example
+## Custom Handling
+
+If the response is not [manually handled](#manually-handling-the-result), a custom behavior can be specified to handle the result.
+
+```java
+@Configuration(proxyBeanMethods = false)
+@RequiredArgsConstructor
+public class ReCaptchaConfiguration {
+
+	@Bean
+	ReCaptchaV2AnnotationInterceptor.ResponseHandler reCaptchaV2AnnotationInterceptorResponseHandler() {
+		return (response) -> response.orThrowWithMessage(MyCustomException::new);
+	}
+
+}
+```
+
+## Controller Examples
+
+### General Case
+
+To protect an endpoint, simply annotate it with the `@ReCaptchaV2` annotation.
 
 ```java
 @RestController
@@ -110,3 +136,42 @@ public class HelloRestController {
 
 }
 ```
+
+### Manually handling the result
+
+Instead of having the error thrown automatically, you can manually handle the result by requesting the `ReCaptchaV2Response` parameter.
+
+The behavior is similar to Spring's `BindingResult'.
+
+```java
+@ReCaptchaV2
+@GetMapping
+public String noSpam(
+	ReCaptchaV2Response reCaptchaResponse
+) {
+	if (isSpamProtectionEnabledGlobally()) {
+		reCaptchaResponse.orThrow();
+	}
+
+	return "Challenge passed!";
+}
+```
+
+### Endpoint-specific configuration
+
+If there are some legacy endpoints, they can also be customized to locate the challenge response from a different location than the globally defined one.
+
+```java
+@ReCaptchaV2(
+	location = ChallengeResponseLocation.QUERY,
+	name = "captcha"
+)
+@GetMapping
+public String noSpam() {
+	return "Challenge passed!";
+}
+```
+
+## Spring Doc Integration
+
+When [SpringDoc OpenAPI](https://github.com/springdoc/springdoc-openapi) is detected and an endpoint is annotated with the `@ReCaptchaV2` annotation, the Swagger Operation will automatically have the necessary query/header parameter to the spec.
