@@ -4,14 +4,14 @@
 > The API is in beta, expect breaking changes.
 
 - [ReCAPTCHA v2 for Java](#recaptcha-v2-for-java)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-  - [Usage](#usage)
-    - [Verify a Challenge Response](#verify-a-challenge-response)
-  - [Spring Boot Starter](#spring-boot-starter)
-    - [Controller Example](#controller-example)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+  - [Verify a Challenge Response](#verify-a-challenge-response)
+- [Spring Boot Starter](#spring-boot-starter)
+  - [Controller Example](#controller-example)
 
-## Installation
+# Installation
 
 ```xml
 <properties>
@@ -27,22 +27,22 @@
 </dependencies>
 ```
 
-## Configuration
+# Configuration
 
 ```java
 ReCaptchaV2Validator validator = ReCaptchaV2Validator.builder()
-    .secretKey("6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI")
-    .build();
+	.secretKey("6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI")
+	.build();
 
 /* or with the test secret key */
 ReCaptchaV2Validator validator = ReCaptchaV2Validator.builder()
-    .testSecretKey()
-    .build();
+	.testSecretKey()
+	.build();
 ```
 
-## Usage
+# Usage
 
-### Verify a Challenge Response
+## Verify a Challenge Response
 
 ```java
 ReCaptchaV2Response response = validator.verify("abcdefijklmnopqrstuvwxyz");
@@ -52,17 +52,17 @@ response.orThrows();
 
 /* use pattern matching to decide */
 switch (response) {
-    case ReCaptchaV2Response.Success success -> {
-        System.out.println("Challenge passed!");
-    }
+	case ReCaptchaV2Response.Success success -> {
+		System.out.println("Challenge passed!");
+	}
 
-    case ReCaptchaV2Response.Error error -> {
-        System.err.println("Challenge failed: %s".formatted(error.message()));
-    }
+	case ReCaptchaV2Response.Error error -> {
+		System.err.println("Challenge failed: %s".formatted(error.message()));
+	}
 }
 ```
 
-## Spring Boot Starter
+# Spring Boot Starter
 
 There is a Spring Boot auto-configuration available.
 
@@ -95,14 +95,14 @@ recaptcha:
       query-parameter-name: reCaptchaResponse
 ```
 
-### Controller Example
+## Controller Example
 
 ```java
 @RestController
 @RequestMapping(path = "/hello", produces = MediaType.APPLICATION_JSON_VALUE)
 public class HelloRestController {
 
-    @ReCaptchaV2
+	@ReCaptchaV2
 	@GetMapping
 	public String noSpam() {
 		return "Challenge passed!";
