@@ -8,9 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 
 /**
@@ -31,7 +29,7 @@ public class ReCaptchaV2ApiResponse {
 	private String hostname;
 
 	@JsonProperty("error-codes")
-	private List<ErrorCode> errorCodes;
+	private List<ReCaptchaV2ErrorCode> errorCodes;
 
 	@JsonIgnore
 	public boolean hasClientError() {
@@ -40,7 +38,7 @@ public class ReCaptchaV2ApiResponse {
 		}
 
 		return errorCodes.stream()
-			.anyMatch(ErrorCode::isClient);
+			.anyMatch(ReCaptchaV2ErrorCode::isClient);
 	}
 
 	@JsonIgnore
@@ -50,48 +48,8 @@ public class ReCaptchaV2ApiResponse {
 		}
 
 		return errorCodes.stream()
-			.map(ErrorCode::toMessage)
+			.map(ReCaptchaV2ErrorCode::message)
 			.collect(Collectors.joining(", "));
-	}
-
-	@AllArgsConstructor
-	@Getter
-	public enum ErrorCode {
-
-		@JsonProperty("missing-input-secret")
-		MISSING_INPUT_SECRET,
-
-		@JsonProperty("invalid-input-secret")
-		INVALID_INPUT_SECRET,
-
-		@JsonProperty("missing-input-response")
-		MISSING_INPUT_RESPONSE,
-
-		@JsonProperty("invalid-input-response")
-		INVALID_INPUT_RESPONSE,
-
-		@JsonProperty("invalid-keys")
-		INVALID_KEYS,
-
-		@JsonProperty("bad-request")
-		BAD_REQUEST,
-
-		@JsonProperty("timeout-or-duplicate")
-		TIMEOUT_OR_DUPLICATE;
-
-		public boolean isClient() {
-			return switch (this) {
-				case MISSING_INPUT_RESPONSE, INVALID_INPUT_RESPONSE -> true;
-				default -> false;
-			};
-		}
-
-		public String toMessage() {
-			return name()
-				.replace("_", " ")
-				.toLowerCase();
-		}
-
 	}
 
 }

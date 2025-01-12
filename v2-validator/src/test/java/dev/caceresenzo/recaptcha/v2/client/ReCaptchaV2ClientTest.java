@@ -38,13 +38,13 @@ class ReCaptchaV2ClientTest {
 			)
 		);
 
-		final var errorResponse = new ReCaptchaV2Response.Error(true, ReCaptchaV2ApiResponse.ErrorCode.INVALID_INPUT_RESPONSE.toMessage());
+		final var errorResponse = new ReCaptchaV2Response.Error(true, ReCaptchaV2ErrorCode.Standard.INVALID_INPUT_RESPONSE.message());
 		assertEquals(
 			errorResponse,
 			client.map(
 				new ReCaptchaV2ApiResponse()
 					.setSuccess(false)
-					.setErrorCodes(Collections.singletonList(ReCaptchaV2ApiResponse.ErrorCode.INVALID_INPUT_RESPONSE))
+					.setErrorCodes(Collections.singletonList(ReCaptchaV2ErrorCode.Standard.INVALID_INPUT_RESPONSE))
 			)
 		);
 
