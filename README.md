@@ -13,6 +13,7 @@
   - [Controller Examples](#controller-examples)
     - [General Case](#general-case)
     - [Manually handling the result](#manually-handling-the-result)
+    - [Typed handling of the result](#typed-handling-of-the-result)
     - [Endpoint-specific configuration](#endpoint-specific-configuration)
   - [Spring Doc Integration](#spring-doc-integration)
 
@@ -20,15 +21,15 @@
 
 ```xml
 <properties>
-    <recaptcha.version>0.2.0</recaptcha.version>
+	<recaptcha.version>0.2.0</recaptcha.version>
 </properties>
 
 <dependencies>
-    <dependency>
-        <groupId>dev.caceresenzo.recaptcha</groupId>
-        <artifactId>recaptcha-v2-validator</artifactId>
-        <version>${recaptcha.version}</version>
-    </dependency>
+	<dependency>
+		<groupId>dev.caceresenzo.recaptcha</groupId>
+		<artifactId>recaptcha-v2-validator</artifactId>
+		<version>${recaptcha.version}</version>
+	</dependency>
 </dependencies>
 ```
 
@@ -61,8 +62,8 @@ switch (response) {
 		System.out.println("Challenge passed!");
 	}
 
-	case ReCaptchaV2Response.Error error -> {
-		System.err.println("Challenge failed: %s".formatted(error.message()));
+	case ReCaptchaV2Response.Failure failure -> {
+		System.err.println("Challenge failed: %s".formatted(failure.message()));
 	}
 }
 ```
@@ -73,11 +74,11 @@ There is a Spring Boot auto-configuration available.
 
 ```xml
 <dependencies>
-    <dependency>
-        <groupId>dev.caceresenzo.recaptcha</groupId>
-        <artifactId>recaptcha-v2-spring-boot-starter</artifactId>
-        <version>${recaptcha.version}</version>
-    </dependency>
+	<dependency>
+		<groupId>dev.caceresenzo.recaptcha</groupId>
+		<artifactId>recaptcha-v2-spring-boot-starter</artifactId>
+		<version>${recaptcha.version}</version>
+	</dependency>
 </dependencies>
 ```
 
@@ -86,18 +87,18 @@ Which is enabled when the Secret Key is specified in the configuration:
 ```yml
 recaptcha:
   v2:
-    secret-key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+  secret-key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 
-    # Configure the web integration
-    web:
-      # Change the default response location (either HEADER or QUERY)
-      location: QUERY
+  # Configure the web integration
+  web:
+    # Change the default response location (either HEADER or QUERY)
+    location: QUERY
 
-      # Change the default header name (if the location is HEADER)
-      header-name: X-ReCaptcha-Response
+    # Change the default header name (if the location is HEADER)
+    header-name: X-ReCaptcha-Response
 
-      # Change the default query parameter name (if the location is QUERY)
-      query-parameter-name: reCaptchaResponse
+    # Change the default query parameter name (if the location is QUERY)
+    query-parameter-name: reCaptchaResponse
 ```
 
 ## Custom Handling
@@ -156,6 +157,21 @@ public String noSpam(
 	return "Challenge passed!";
 }
 ```
+
+### Typed handling of the result
+
+The behavior will change based on the response type specified in the parameter.
+
+| Parameter Type                | Auto. Throw | How to handle                                                                                           |
+| ----------------------------- | ----------- | ------------------------------------------------------------------------------------------------------- |
+| `(none)`                      | Yes         | Success is expected by default.<br />Bind errors will be thrown, and the response handler will be used. |
+| `ReCaptchaV2Response`         | No          | Response must be handled by the user.<br />Bind errors are muted and treated like regular failures.     |
+| `ReCaptchaV2Response.Success` | Yes         | Success is expected.<br />Same behavior as for `(none)`.                                                |
+| `ReCaptchaV2Response.Failure` | Partial     | Failure is expected.<br />Bind errors will be thrown, but the response must be handled by the user.     |
+
+> [!NOTE]
+> Bind errors are [`MissingRequestHeaderException`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/MissingRequestHeaderException.html) and [`MissingServletRequestParameterException`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/MissingServletRequestParameterException.html). <br />
+> If they are muted, they will be replaced with `missing-input-response`.
 
 ### Endpoint-specific configuration
 
