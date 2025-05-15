@@ -71,7 +71,7 @@ class ReCaptchaV2AnnotationInterceptorTest {
 		final var errorMessage = "something happen";
 
 		final var validator = mock(ReCaptchaV2Validator.class);
-		when(validator.verify(anyString())).thenReturn(new ReCaptchaV2Response.Error(false, errorMessage));
+		when(validator.verify(anyString())).thenReturn(new ReCaptchaV2Response.Failure(false, errorMessage));
 
 		final var defaults = new ReCaptchaV2ValidatorDefaults(ChallengeResponseLocation.HEADER);
 

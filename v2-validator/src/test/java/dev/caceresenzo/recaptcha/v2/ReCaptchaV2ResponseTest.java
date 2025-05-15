@@ -12,7 +12,7 @@ import dev.caceresenzo.recaptcha.ReCaptchaException;
 class ReCaptchaV2ResponseTest {
 
 	static final ReCaptchaV2Response.Success SUCCESS = new ReCaptchaV2Response.Success(null, null);
-	static final ReCaptchaV2Response.Error ERROR = new ReCaptchaV2Response.Error(true, "hello");
+	static final ReCaptchaV2Response.Failure ERROR = new ReCaptchaV2Response.Failure(true, "hello");
 
 	@Test
 	void orThrow() {
@@ -31,9 +31,9 @@ class ReCaptchaV2ResponseTest {
 
 	@Test
 	void orThrowWithError() {
-		assertDoesNotThrow(() -> SUCCESS.orThrowWithError((error) -> new IllegalStateException(error.toString())));
+		assertDoesNotThrow(() -> SUCCESS.orThrowWithFailure((error) -> new IllegalStateException(error.toString())));
 
-		final var exception = assertThrows(IllegalStateException.class, () -> ERROR.orThrowWithError((error) -> new IllegalStateException(error.toString())));
+		final var exception = assertThrows(IllegalStateException.class, () -> ERROR.orThrowWithFailure((error) -> new IllegalStateException(error.toString())));
 		assertEquals(ERROR.toString(), exception.getMessage());
 	}
 

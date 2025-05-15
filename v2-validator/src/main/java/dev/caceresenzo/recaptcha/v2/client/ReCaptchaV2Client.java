@@ -72,7 +72,7 @@ public class ReCaptchaV2Client implements ReCaptchaV2Validator {
 			);
 		}
 
-		return new ReCaptchaV2Response.Error(
+		return new ReCaptchaV2Response.Failure(
 			response.hasClientError(),
 			response.toErrorPhrase()
 		);

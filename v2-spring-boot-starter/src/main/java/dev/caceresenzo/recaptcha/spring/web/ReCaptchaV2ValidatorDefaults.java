@@ -2,6 +2,7 @@ package dev.caceresenzo.recaptcha.spring.web;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 
 import dev.caceresenzo.recaptcha.spring.web.annotation.ChallengeResponseLocation;
@@ -28,12 +29,11 @@ public record ReCaptchaV2ValidatorDefaults(
 		}
 	}
 
-	@SneakyThrows
 	public String resolve(
 		ChallengeResponseLocation location,
 		String name,
 		HttpServletRequest request
-	) {
+	) throws MissingRequestValueException {
 		location = resolveLocation(location);
 		name = resolveName(location, name);
 
@@ -50,7 +50,7 @@ public record ReCaptchaV2ValidatorDefaults(
 		throw switch (location) {
 			case HEADER -> new MissingRequestHeaderException(name, HEADER_METHOD);
 			case QUERY -> new MissingServletRequestParameterException(name, String.class.getSimpleName());
-			case DEFAULT -> new IllegalStateException();
+			case DEFAULT -> throw new IllegalStateException();
 		};
 	}
 

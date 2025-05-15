@@ -38,7 +38,7 @@ class ReCaptchaV2ClientTest {
 			)
 		);
 
-		final var errorResponse = new ReCaptchaV2Response.Error(true, ReCaptchaV2ErrorCode.Standard.INVALID_INPUT_RESPONSE.message());
+		final var errorResponse = new ReCaptchaV2Response.Failure(true, ReCaptchaV2ErrorCode.Standard.INVALID_INPUT_RESPONSE.message());
 		assertEquals(
 			errorResponse,
 			client.map(

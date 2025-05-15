@@ -27,7 +27,7 @@ public class ReCaptchaSwaggerAutoConfiguration {
 	) {
 		AbstractRequestService.addRequestWrapperToIgnore(ReCaptchaV2Response.class);
 		AbstractRequestService.addRequestWrapperToIgnore(ReCaptchaV2Response.Success.class);
-		AbstractRequestService.addRequestWrapperToIgnore(ReCaptchaV2Response.Error.class);
+		AbstractRequestService.addRequestWrapperToIgnore(ReCaptchaV2Response.Failure.class);
 
 		return new ReCaptchaV2SwaggerCustomizer(
 			reCaptchaV2ValidatorDefaults

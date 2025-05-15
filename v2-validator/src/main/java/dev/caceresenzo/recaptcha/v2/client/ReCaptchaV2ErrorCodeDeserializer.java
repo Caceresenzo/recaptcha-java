@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
@@ -26,7 +25,7 @@ public class ReCaptchaV2ErrorCodeDeserializer extends StdDeserializer<ReCaptchaV
 	}
 
 	@Override
-	public ReCaptchaV2ErrorCode deserialize(JsonParser parser, DeserializationContext context) throws IOException, JsonProcessingException {
+	public ReCaptchaV2ErrorCode deserialize(JsonParser parser, DeserializationContext context) throws IOException {
 		final var message = parser.getText();
 
 		final var standard = STANDARD_MAPPING.get(message);
