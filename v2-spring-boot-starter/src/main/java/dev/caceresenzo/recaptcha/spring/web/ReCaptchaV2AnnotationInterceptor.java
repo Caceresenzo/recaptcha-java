@@ -1,11 +1,13 @@
 package dev.caceresenzo.recaptcha.spring.web;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import dev.caceresenzo.recaptcha.spring.web.ReCaptchaV2ArgumentResolver.ExpectResponseParameterResult;
 import dev.caceresenzo.recaptcha.spring.web.annotation.ReCaptchaV2;
 import dev.caceresenzo.recaptcha.v2.ReCaptchaV2Response;
 import dev.caceresenzo.recaptcha.v2.ReCaptchaV2Validator;
@@ -24,7 +26,7 @@ public class ReCaptchaV2AnnotationInterceptor implements HandlerInterceptor {
 	private final ResponseHandler responseHandler;
 
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws MissingRequestValueException {
 		if (!(handler instanceof HandlerMethod handlerMethod)) {
 			return true;
 		}
@@ -36,19 +38,23 @@ public class ReCaptchaV2AnnotationInterceptor implements HandlerInterceptor {
 			return true;
 		}
 
-		final var hasNoResponseParameter = Arrays.stream(handlerMethod.getMethodParameters()).noneMatch(ReCaptchaV2ArgumentResolver::isResponseType);
+		final var expectResponseParameter = Arrays.stream(handlerMethod.getMethodParameters())
+			.map(ReCaptchaV2ArgumentResolver::isResponseType)
+			.filter(Predicate.not(ExpectResponseParameterResult.NONE::equals))
+			.findFirst()
+			.orElse(ExpectResponseParameterResult.NONE);
 
-		final var reCaptchaResponse = processResponse(request, annotation, hasNoResponseParameter);
+		final var reCaptchaResponse = processResponse(request, annotation, expectResponseParameter.canThrowDirectly());
 		request.setAttribute(RESPONSE_ATTRIBUTE, reCaptchaResponse);
 
-		if (hasNoResponseParameter) {
+		if (ExpectResponseParameterResult.NONE.equals(expectResponseParameter)) {
 			responseHandler.handle(reCaptchaResponse);
 		}
 
 		return true;
 	}
 
-	private ReCaptchaV2Response processResponse(HttpServletRequest request, ReCaptchaV2 annotation, boolean hasNoResponseParameter) throws MissingRequestValueException {
+	private ReCaptchaV2Response processResponse(HttpServletRequest request, ReCaptchaV2 annotation, boolean canThrowDirectly) throws MissingRequestValueException {
 		final String challengeResponse;
 		try {
 			challengeResponse = defaults.resolve(
@@ -57,7 +63,7 @@ public class ReCaptchaV2AnnotationInterceptor implements HandlerInterceptor {
 				request
 			);
 		} catch (MissingRequestValueException exception) {
-			if (hasNoResponseParameter) {
+			if (canThrowDirectly) {
 				throw exception;
 			}
 

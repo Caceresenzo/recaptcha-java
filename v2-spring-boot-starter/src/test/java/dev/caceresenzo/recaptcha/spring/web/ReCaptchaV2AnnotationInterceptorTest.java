@@ -15,8 +15,10 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.method.HandlerMethod;
 
+import dev.caceresenzo.recaptcha.spring.web.ReCaptchaV2ArgumentResolver.ExpectResponseParameterResult;
 import dev.caceresenzo.recaptcha.spring.web.annotation.ChallengeResponseLocation;
 import dev.caceresenzo.recaptcha.spring.web.annotation.ReCaptchaV2;
 import dev.caceresenzo.recaptcha.v2.ReCaptchaV2Response;
@@ -30,6 +32,10 @@ class ReCaptchaV2AnnotationInterceptorTest {
 
 	static HandlerMethod withAnnotation;
 	static HandlerMethod withoutAnnotation;
+	static HandlerMethod expectNone;
+	static HandlerMethod expectAny;
+	static HandlerMethod expectSuccess;
+	static HandlerMethod expectFailure;
 
 	@BeforeAll
 	static void setUp() {
@@ -37,6 +43,10 @@ class ReCaptchaV2AnnotationInterceptorTest {
 
 		withAnnotation = new HandlerMethod(controller, ReflectionUtils.findMethod(Controller.class, "withAnnotation"));
 		withoutAnnotation = new HandlerMethod(controller, ReflectionUtils.findMethod(Controller.class, "withoutAnnotation"));
+		expectNone = new HandlerMethod(controller, ReflectionUtils.findMethod(Controller.class, "expectNone"));
+		expectAny = new HandlerMethod(controller, ReflectionUtils.findMethod(Controller.class, "expectAny", ReCaptchaV2Response.class));
+		expectSuccess = new HandlerMethod(controller, ReflectionUtils.findMethod(Controller.class, "expectSuccess", ReCaptchaV2Response.Success.class));
+		expectFailure = new HandlerMethod(controller, ReflectionUtils.findMethod(Controller.class, "expectFailure", ReCaptchaV2Response.Failure.class));
 	}
 
 	@Test
@@ -88,12 +98,57 @@ class ReCaptchaV2AnnotationInterceptorTest {
 		assertEquals(errorMessage, exception.getMessage());
 	}
 
+	/** @see {@link ExpectResponseParameterResult#NONE}. */
+	@Test
+	void expectNone() {
+		assertThrows(MissingRequestValueException.class, () -> expectTest(expectNone));
+	}
+
+	/** @see {@link ExpectResponseParameterResult#ANY}. */
+	@Test
+	void expectAny() {
+		assertDoesNotThrow(() -> expectTest(expectAny));
+	}
+
+	/** @see {@link ExpectResponseParameterResult#SUCCESS}. */
+	@Test
+	void expectSuccess() {
+		assertThrows(MissingRequestValueException.class, () -> expectTest(expectSuccess));
+	}
+
+	/** @see {@link ExpectResponseParameterResult#FAILURE}. */
+	@Test
+	void expectFailure() {
+		assertDoesNotThrow(() -> expectTest(expectFailure));
+	}
+
+	void expectTest(HandlerMethod method) throws MissingRequestValueException {
+		final var defaults = new ReCaptchaV2ValidatorDefaults(ChallengeResponseLocation.HEADER);
+		final var interceptor = new ReCaptchaV2AnnotationInterceptor(null, defaults, ReCaptchaV2Response::orThrow);
+
+		final var request = mock(HttpServletRequest.class);
+
+		interceptor.preHandle(request, null, method);
+	}
+
 	public static class Controller {
 
 		@ReCaptchaV2
 		public void withAnnotation() {}
 
 		public void withoutAnnotation() {}
+
+		@ReCaptchaV2
+		public void expectNone() {}
+
+		@ReCaptchaV2
+		public void expectAny(ReCaptchaV2Response reCaptchaResponse) {}
+
+		@ReCaptchaV2
+		public void expectSuccess(ReCaptchaV2Response.Success reCaptchaResponse) {}
+
+		@ReCaptchaV2
+		public void expectFailure(ReCaptchaV2Response.Failure reCaptchaResponse) {}
 
 	}
 
