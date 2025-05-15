@@ -7,15 +7,15 @@
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
-  - [Verify a Challenge Response](#verify-a-challenge-response)
+	- [Verify a Challenge Response](#verify-a-challenge-response)
 - [Spring Boot Starter](#spring-boot-starter)
-  - [Custom Handling](#custom-handling)
-  - [Controller Examples](#controller-examples)
-    - [General Case](#general-case)
-    - [Manually handling the result](#manually-handling-the-result)
-    - [Typed handling of the result](#typed-handling-of-the-result)
-    - [Endpoint-specific configuration](#endpoint-specific-configuration)
-  - [Spring Doc Integration](#spring-doc-integration)
+	- [Custom Handling](#custom-handling)
+	- [Controller Examples](#controller-examples)
+		- [General Case](#general-case)
+		- [Manually handling the result](#manually-handling-the-result)
+		- [Typed handling of the result](#typed-handling-of-the-result)
+		- [Endpoint-specific configuration](#endpoint-specific-configuration)
+	- [Spring Doc Integration](#spring-doc-integration)
 
 # Installation
 
@@ -172,6 +172,10 @@ The behavior will change based on the response type specified in the parameter.
 > [!NOTE]
 > Bind errors are [`MissingRequestHeaderException`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/MissingRequestHeaderException.html) and [`MissingServletRequestParameterException`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/MissingServletRequestParameterException.html). <br />
 > If they are muted, they will be replaced with `missing-input-response`.
+
+> [!WARNING]
+> A response **might be `null`** if it does not correspond. <br />
+> For example, the `ReCaptchaV2Response` is `.Success`, but the required type is `.Failure` (and vice versa).
 
 ### Endpoint-specific configuration
 
