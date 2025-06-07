@@ -25,7 +25,12 @@ public class ReCaptchaV2AutoConfiguration {
 	ReCaptchaV2Validator reCaptchaVerifier(ReCaptchaV2Properties properties) throws IOException {
 		log.info("Configuring reCAPTCHA v2");
 
-		return ReCaptchaV2Validator.builder()
+		final var builder = switch (properties.getService()) {
+			case GOOGLE_RECAPTCHA -> ReCaptchaV2Validator.builder();
+			case CLOUDFLARE_TURNSTILE -> ReCaptchaV2Validator.turnstile();
+		};
+
+		return builder
 			.secretKey(properties.getSecretKey())
 			.build();
 	}

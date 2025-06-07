@@ -16,6 +16,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev.caceresenzo.recaptcha.ReCaptchaException;
 import dev.caceresenzo.recaptcha.v2.ReCaptchaV2Response;
 import dev.caceresenzo.recaptcha.v2.ReCaptchaV2Validator;
+import dev.caceresenzo.recaptcha.v2.builder.GoogleReCaptchaV2ValidatorBuilder;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.ToString;
@@ -23,16 +24,27 @@ import lombok.ToString;
 public class ReCaptchaV2Client implements ReCaptchaV2Validator {
 
 	public static final String FORM_MEDIA_TYPE = "application/x-www-form-urlencoded";
-	public static final URI VERIFY_URL = URI.create("https://www.google.com/recaptcha/api/siteverify");
 
 	@ToString.Exclude
 	private final String secretKey;
 
+	private final URI verifyUrl;
+
 	private final HttpClient httpClient;
 	private final ObjectMapper objectMapper;
 
-	public ReCaptchaV2Client(@NonNull String secretKey) {
+	public ReCaptchaV2Client(
+		@NonNull String secretKey
+	) {
+		this(secretKey, GoogleReCaptchaV2ValidatorBuilder.DEFAULT_VERIFY_URL);
+	}
+
+	public ReCaptchaV2Client(
+		@NonNull String secretKey,
+		@NonNull URI verifyUrl
+	) {
 		this.secretKey = secretKey;
+		this.verifyUrl = verifyUrl;
 
 		this.httpClient = HttpClient.newBuilder().build();
 		this.objectMapper = JsonMapper.builder()
@@ -55,7 +67,7 @@ public class ReCaptchaV2Client implements ReCaptchaV2Validator {
 	@SneakyThrows
 	public ReCaptchaV2Response doVerify(String challengeResponse, String remoteIp) {
 		final var request = HttpRequest.newBuilder()
-			.uri(VERIFY_URL)
+			.uri(verifyUrl)
 			.header("Content-Type", FORM_MEDIA_TYPE)
 			.POST(BodyPublishers.ofString(buildRequestBody(challengeResponse, remoteIp)))
 			.build();

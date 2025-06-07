@@ -17,7 +17,8 @@ public class ReCaptchaV2ErrorCodeDeserializer extends StdDeserializer<ReCaptchaV
 		"invalid-input-response", ReCaptchaV2ErrorCode.Standard.INVALID_INPUT_RESPONSE,
 		"invalid-keys", ReCaptchaV2ErrorCode.Standard.INVALID_KEYS,
 		"bad-request", ReCaptchaV2ErrorCode.Standard.BAD_REQUEST,
-		"timeout-or-duplicate", ReCaptchaV2ErrorCode.Standard.TIMEOUT_OR_DUPLICATE
+		"timeout-or-duplicate", ReCaptchaV2ErrorCode.Standard.TIMEOUT_OR_DUPLICATE,
+		"internal-error", ReCaptchaV2ErrorCode.Standard.INTERNAL_ERROR
 	);
 
 	public ReCaptchaV2ErrorCodeDeserializer() {

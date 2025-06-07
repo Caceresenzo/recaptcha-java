@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>turnstile Example</title>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+    <h1>turnstile v2 Checkbox</h1>
+    <form id="turnstile-form" action="javascript:void(0);">
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAABgYe9C-emnTINpg"></div>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('turnstile-form').addEventListener('submit', function() {
+            var response = turnstile.getResponse();
+            document.getElementById('response').innerText = response ? "Challenge Response: " + response : "Please complete the reCAPTCHA.";
+        });
+    </script>
+</body>
+</html>
