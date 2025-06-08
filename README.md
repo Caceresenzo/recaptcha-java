@@ -1,11 +1,11 @@
-# ReCAPTCHA v2 for Java
+# reCAPTCHA v2 for Java
 
 This Java client integrates with [Google's reCAPTCHA v2](https://developers.google.com/recaptcha/intro) and supports [Cloudflare's Turnstile](https://developers.cloudflare.com/turnstile/). It includes a Spring Boot starter for easy integration into your applications.
 
 > [!WARNING]
 > The API is in beta, expect breaking changes.
 
-- [ReCAPTCHA v2 for Java](#recaptcha-v2-for-java)
+- [reCAPTCHA v2 for Java](#recaptcha-v2-for-java)
 - [Installation](#installation)
 - [Configuration](#configuration)
 	- [Cloudflare Turnstile](#cloudflare-turnstile)
@@ -122,7 +122,7 @@ recaptcha:
 ```
 
 > [!NOTE]
-> The default service used is Google ReCaptcha V2.
+> The default service used is Google reCAPTCHA V2.
 
 ## Cloudflare Turnstile
 
@@ -132,7 +132,7 @@ You can use Cloudflare Turnstile simply by setting the `service` property and us
 recaptcha:
   v2:
     # Use Cloudflare Turnstile service
-	service: CLOUDFLARE_TURNSTILE
+    service: CLOUDFLARE_TURNSTILE
 
     secret-key: 1x0000000000000000000000000000000AA
 ```
