@@ -25,7 +25,7 @@ This Java client integrates with [Google's reCAPTCHA v2](https://developers.goog
 
 ```xml
 <properties>
-	<recaptcha.version>0.3.0</recaptcha.version>
+	<recaptcha.version>0.4.0</recaptcha.version>
 </properties>
 
 <dependencies>
